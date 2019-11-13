@@ -69,37 +69,9 @@ public class FormationRest {
      * Créer une nouvelle formation. Pour appeler cette méthode on doit utiliser l'URL :
      * http://localhost:8080/TechnicoCommercial-web/webresources/formations
      * 
-     * @param formation
-     * @param codeFormation
-     * @param libelleFormation
-     * @param nbMax
-     * @param niveauFormation
-     * @param dureeFormation
-     * @param equipementsNecessaires
-     * @param competencesNecessaires
-     * @param nbMin
-     * @param thematiqueFormation
-     * @return 
+     * @param formationString
+     * @return Response
      */
-    /*
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response createFormations(@FormParam("codeFormation") String codeFormation, @FormParam("libelleFormation") String libelleFormation, 
-            @FormParam("dureeFormation") int dureeFormation, @FormParam("equipementsNecessaires") String equipementsNecessaires,
-            @FormParam("competencesNecessaires") String competencesNecessaires, @FormParam("nbMin") int nbMin, 
-            @FormParam("nbMax") int nbMax, @FormParam("thematiqueFormation") String thematiqueFormation, @FormParam("niveauFormation") int niveauFormation) {
-
-        List<Integer> listeEquipementsNecessaires = transformStringToList(equipementsNecessaires);
-        List<Integer> listeCompetencesNecessaires = transformStringToList(competencesNecessaires);
-        
-        //System.out.println("code : " + codeFormation + ", libelle : " + libelleFormation + ", duree : " + dureeFormation + ", equipements : " + listeEquipementsNecessaires +
-        //        ", competences : " + listeCompetencesNecessaires + ", nbMin : " + nbMin + ", nbMax : " + nbMax + ", thematiqueFormation : " + thematiqueFormation + ", niveauFormation" + niveauFormation);
-        
-        this.fsl.creerFormation(codeFormation, libelleFormation, dureeFormation, listeEquipementsNecessaires, listeCompetencesNecessaires, nbMin, nbMax, thematiqueFormation, niveauFormation);
-
-        return Response.status(Status.OK).build();
-    }
-    */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createFormationBis(String formationString) {
@@ -107,15 +79,6 @@ public class FormationRest {
         FormationResource fr = gson.fromJson(formationString, FormationResource.class);
         this.fsl.creerFormation(fr);
         return Response.status(Status.OK).build();
-    }
-    
-    public List<Integer> transformStringToList(String toTransform) {
-        List<Integer> list = new ArrayList<Integer>();
-        String[] valeurs = toTransform.split(",");
-        for(int i = 0; i < valeurs.length; i++){
-            list.add(Integer.parseInt(valeurs[i]));
-        }
-        return list;
     }
     
     /**

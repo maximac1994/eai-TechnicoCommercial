@@ -19,8 +19,8 @@ public interface GestionFormationLocal {
     
     public List<Formation> listerFormations();
     
-    //public void creerFormation(String codeFormation, String libelleFormation, int dureeFormation, List<Integer> equipementsNecessaires, List<Integer> competencesNecessaires, int nbMin, int nbMax, String thematiqueFormation, int niveauFormation);
     public void creerFormation(FormationResource formation);
+    
     public void supprimerFormation(int idFormation);
     
 }

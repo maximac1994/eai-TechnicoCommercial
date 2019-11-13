@@ -28,12 +28,7 @@ public class FormationService implements FormationServiceLocal {
         return this.gfl.listerFormations();
     }
     
-    /*
     @Override
-    public void creerFormation(String codeFormation, String libelleFormation, int dureeFormation, List<Integer> equipementsNecessaires, List<Integer> competencesNecessaires, int nbMin, int nbMax, String thematiqueFormation, int niveauFormation) {
-        this.gfl.creerFormation(codeFormation, libelleFormation, dureeFormation, equipementsNecessaires, competencesNecessaires, nbMin, nbMax, thematiqueFormation, niveauFormation);
-    }*/
-    
     public void creerFormation(FormationResource formation) {
         System.out.println("ici c'est bon");
         this.gfl.creerFormation(formation);
