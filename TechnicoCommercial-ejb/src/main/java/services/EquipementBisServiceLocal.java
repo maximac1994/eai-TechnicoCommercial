@@ -5,14 +5,17 @@
  */
 package services;
 
+import entities.EquipementBis;
+import java.util.List;
+import javax.ejb.Local;
+
 /**
  *
  * @author 33785
  */
-public class NewClass {
+@Local
+public interface EquipementBisServiceLocal {
     
-    public static void main(String[] args) {
-        System.out.println("coucou");
-    }
+    public List<EquipementBis> listerEquipements();
     
 }
