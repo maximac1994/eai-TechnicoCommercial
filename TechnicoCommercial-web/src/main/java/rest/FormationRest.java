@@ -7,6 +7,7 @@ package rest;
 
 import com.google.gson.Gson;
 import entities.Formation;
+import exceptions.UnknownFormationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -75,19 +76,25 @@ public class FormationRest {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createFormationBis(String formationString) {
-        System.out.println(formationString);
         FormationResource fr = gson.fromJson(formationString, FormationResource.class);
         this.fsl.creerFormation(fr);
-        return Response.status(Status.OK).build();
+        return Response.status(Status.OK).entity("Formation ajoutée").build();
     }
     
     /**
      * Supprimer une formation Pour appeler cette méthode on doit utiliser l'URL :
      * http://localhost:8080/TechnicoCommercial-web/webresources/formations
+     * @param idFormation
+     * @return 
      */
     @DELETE
-    public void deleteFormation(@QueryParam("idFormation") int idFormation) {
-        this.fsl.supprimerFormation(idFormation);
+    public Response deleteFormation(@QueryParam("idFormation") int idFormation) {
+        try {
+            this.fsl.supprimerFormation(idFormation);
+        } catch (UnknownFormationException ex) {
+            return Response.status(Status.BAD_REQUEST).entity("Cette formation n'existe pas").build();
+        }
+        return Response.status(Status.OK).entity("Formation " + idFormation + " supprimée").build();
     }
 
     /**

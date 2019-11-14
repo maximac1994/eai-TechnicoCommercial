@@ -6,6 +6,7 @@
 package services;
 
 import entities.Formation;
+import exceptions.UnknownFormationException;
 import java.util.List;
 import javax.ejb.Local;
 import resources.FormationResource;
@@ -21,6 +22,6 @@ public interface FormationServiceLocal {
     
     public void creerFormation(FormationResource formation);
     
-    public void supprimerFormation(int idFormation);
+    public void supprimerFormation(int idFormation) throws UnknownFormationException;
     
 }

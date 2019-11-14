@@ -7,6 +7,7 @@ package services;
 
 import business.GestionFormationLocal;
 import entities.Formation;
+import exceptions.UnknownFormationException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -30,12 +31,11 @@ public class FormationService implements FormationServiceLocal {
     
     @Override
     public void creerFormation(FormationResource formation) {
-        System.out.println("ici c'est bon");
         this.gfl.creerFormation(formation);
     }
 
     @Override
-    public void supprimerFormation(int idFormation) {
+    public void supprimerFormation(int idFormation) throws UnknownFormationException {
         this.gfl.supprimerFormation(idFormation);
     }
 

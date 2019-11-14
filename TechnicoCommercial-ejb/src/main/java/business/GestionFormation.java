@@ -9,6 +9,7 @@ import entities.EquipementBis;
 import entities.Formation;
 import entities.LienFormationCompetence;
 import entities.LienFormationEquipement;
+import exceptions.UnknownFormationException;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -46,7 +47,6 @@ public class GestionFormation implements GestionFormationLocal {
         Formation newF = ffl.create(f);
         // Ajout lien formation - equipementBis
         for (int idEquipement : formation.getEquipementsNecessaires()) {
-            System.out.println("id formation : " + newF.getIdFormation() + ", idEquipement : " + idEquipement);
             LienFormationEquipement lienformationEquipement = new LienFormationEquipement(newF.getIdFormation(), idEquipement);
             lienFacadeEquipement.create(lienformationEquipement);
         }
@@ -57,13 +57,17 @@ public class GestionFormation implements GestionFormationLocal {
         }
     }
 
+    @Override
     public List<Formation> listerFormations() {
         return this.ffl.findAll();
     }
 
     @Override
-    public void supprimerFormation(int idFormation) {
+    public void supprimerFormation(int idFormation) throws UnknownFormationException {
         Formation formation = this.ffl.find(idFormation);
+        if (formation == null) {
+            throw new UnknownFormationException();
+        }
         this.ffl.remove(formation);
     }
 
