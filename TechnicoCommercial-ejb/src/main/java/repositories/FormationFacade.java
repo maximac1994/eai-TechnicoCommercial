@@ -6,6 +6,7 @@
 package repositories;
 
 import entities.Formation;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,6 +32,13 @@ public class FormationFacade extends AbstractFacade<Formation> implements Format
 
     public FormationFacade() {
         super(Formation.class);
+    }
+    
+    @Override
+    public List<Formation> findByCode(String code) {
+        return (em.createNamedQuery("Formation.findByCodeFormation")
+                .setParameter("codeFormation", code)
+                .getResultList());
     }
 
 }

@@ -11,12 +11,16 @@ import entities.LienFormationCompetence;
 import entities.LienFormationEquipement;
 import exceptions.UnknownFormationException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.jms.JMSException;
 import repositories.FormationFacadeLocal;
 import repositories.LienFormationCompetenceFacadeLocal;
 import repositories.LienFormationEquipementFacadeLocal;
 import resources.FormationResource;
+import sender.FileConfirmerExistenceSender;
 
 /**
  *
@@ -33,6 +37,12 @@ public class GestionFormation implements GestionFormationLocal {
 
     @EJB
     LienFormationCompetenceFacadeLocal lienFacadeCompetence;
+    
+    FileConfirmerExistenceSender senderConfirmerExistence;
+
+    public GestionFormation() {
+        this.senderConfirmerExistence = new FileConfirmerExistenceSender();
+    }
 
     @Override
     public void creerFormation(FormationResource formation) {
@@ -69,6 +79,17 @@ public class GestionFormation implements GestionFormationLocal {
             throw new UnknownFormationException();
         }
         this.ffl.remove(formation);
+    }
+
+    @Override
+    public void verifierExistanceFormation(String codeFormation) throws JMSException, InterruptedException {
+        if (this.ffl.findByCode(codeFormation).size() != 0) {
+            System.out.println("OUI!!!");
+            this.senderConfirmerExistence.publish(true);
+        } else {
+            System.out.println("NON!!!!");
+            this.senderConfirmerExistence.publish(false);
+        }
     }
 
 }
