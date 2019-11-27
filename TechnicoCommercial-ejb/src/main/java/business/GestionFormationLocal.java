@@ -5,6 +5,7 @@
  */
 package business;
 
+import MessagesTypes.DemandeFormationMessage;
 import entities.Formation;
 import exceptions.UnknownFormationException;
 import java.util.List;
@@ -25,6 +26,8 @@ public interface GestionFormationLocal {
     
     public void supprimerFormation(int idFormation) throws UnknownFormationException;
     
-    public void verifierExistanceFormation(String codeFormation) throws JMSException, InterruptedException;
+    public void verifierExistanceFormation(DemandeFormationMessage demandeFormation) throws JMSException, InterruptedException;
+    
+    public void listerFormateursDisponibles();
     
 }

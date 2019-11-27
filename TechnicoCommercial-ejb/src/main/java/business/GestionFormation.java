@@ -5,6 +5,8 @@
  */
 package business;
 
+import MessagesTypes.DemandeFormationMessage;
+import MessagesTypes.ReponseExistenceFormation;
 import entities.EquipementBis;
 import entities.Formation;
 import entities.LienFormationCompetence;
@@ -37,7 +39,7 @@ public class GestionFormation implements GestionFormationLocal {
 
     @EJB
     LienFormationCompetenceFacadeLocal lienFacadeCompetence;
-    
+
     FileConfirmerExistenceSender senderConfirmerExistence;
 
     public GestionFormation() {
@@ -82,14 +84,22 @@ public class GestionFormation implements GestionFormationLocal {
     }
 
     @Override
-    public void verifierExistanceFormation(String codeFormation) throws JMSException, InterruptedException {
-        if (this.ffl.findByCode(codeFormation).size() != 0) {
-            System.out.println("OUI!!!");
-            this.senderConfirmerExistence.publish(true);
+    public void verifierExistanceFormation(DemandeFormationMessage demandeFormation) throws JMSException, InterruptedException {
+        Logger.getLogger(GestionFormation.class.getName()).log(Level.INFO, "[APPLI TECHNICO] GestionFormation - verifierExistenceFormation() : " + demandeFormation.toString());
+        ReponseExistenceFormation reponseExistence = new ReponseExistenceFormation();
+        reponseExistence.setDemandeFormationMessage(demandeFormation);
+        if (this.ffl.findByCode(demandeFormation.getCodeFormation()).size() != 0) {
+            reponseExistence.setFormationExists(true);
+            this.senderConfirmerExistence.publish(reponseExistence);
         } else {
-            System.out.println("NON!!!!");
-            this.senderConfirmerExistence.publish(false);
+            reponseExistence.setFormationExists(false);
+            this.senderConfirmerExistence.publish(reponseExistence);
         }
+    }
+
+    @Override
+    public void listerFormateursDisponibles() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

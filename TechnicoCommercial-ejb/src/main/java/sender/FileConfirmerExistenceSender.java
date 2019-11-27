@@ -5,7 +5,9 @@
  */
 package sender;
 
-import MessagesTypes.CodeFormationMessage;
+import MessagesTypes.ReponseExistenceFormation;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
@@ -22,7 +24,7 @@ import javax.naming.NamingException;
  * @author 33785
  */
 public class FileConfirmerExistenceSender {
-    
+
     Context context = null;
     ConnectionFactory factory = null;
     Connection connection = null;
@@ -31,8 +33,8 @@ public class FileConfirmerExistenceSender {
     Destination dest = null;
     Session session = null;
     MessageProducer sender = null;
-    
-    public void connect() {
+
+    public void createContext() {
         try {
             // create the JNDI initial context.
             context = new InitialContext();
@@ -40,34 +42,36 @@ public class FileConfirmerExistenceSender {
             factory = (ConnectionFactory) context.lookup(factoryName);
             // look up the Destination
             dest = (Destination) context.lookup(destName);
-            // create the connection
-            connection = factory.createConnection();
-            // create the session
-            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            // create the sender
-            sender = session.createProducer(dest);
-            // start the connection, to enable message sends
-            connection.start();
-        } catch (JMSException exception) {
-            exception.printStackTrace();
         } catch (NamingException exception) {
             exception.printStackTrace();
         } finally {
-           
+
         }
     }
-        
-    public void publish(boolean formationExist) throws JMSException, InterruptedException {
-        System.out.println("coucou toi, bolean : " + formationExist);
+
+    public void connect() throws JMSException {
+        // create the connection
+        connection = factory.createConnection();
+        // create the session
+        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        // create the sender
+        sender = session.createProducer(dest);
+        // start the connection, to enable message sends
+        connection.start();
+    }
+
+    public void publish(ReponseExistenceFormation reponseExistence) throws JMSException, InterruptedException {
+        Logger.getLogger(FileConfirmerExistenceSender.class.getName()).log(Level.INFO, "[APPLI TECHNICO] FileConfirmerExistenceSender - publish() : " + reponseExistence.toString());
         if (context == null) {
-            this.connect();
+            this.createContext();
         }
-        System.out.println("c'est bon");
-        ObjectMessage message = session.createObjectMessage(formationExist);
+        this.connect();
+        ObjectMessage message = session.createObjectMessage(reponseExistence);
         //message.setJMSType();
         sender.send(message);
+        this.close();
     }
-    
+
     public void close() {
         // close the context
         if (context != null) {
@@ -87,5 +91,5 @@ public class FileConfirmerExistenceSender {
             }
         }
     }
-   
+
 }
