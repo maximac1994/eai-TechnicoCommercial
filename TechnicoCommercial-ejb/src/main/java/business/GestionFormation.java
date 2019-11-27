@@ -90,6 +90,7 @@ public class GestionFormation implements GestionFormationLocal {
         reponseExistence.setDemandeFormationMessage(demandeFormation);
         if (this.ffl.findByCode(demandeFormation.getCodeFormation()).size() != 0) {
             Formation formation = this.ffl.findByCode(demandeFormation.getCodeFormation()).get(0);
+            reponseExistence.getDemandeFormationMessage().setIdFormation(formation.getIdFormation());
             reponseExistence.getDemandeFormationMessage().setDuree(formation.getDureeFormation());
             reponseExistence.getDemandeFormationMessage().setNiveau(formation.getNiveauFormation());
             reponseExistence.getDemandeFormationMessage().setNbMax(formation.getNbMax());
