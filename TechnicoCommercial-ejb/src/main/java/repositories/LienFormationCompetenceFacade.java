@@ -6,6 +6,8 @@
 package repositories;
 
 import entities.LienFormationCompetence;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +30,15 @@ public class LienFormationCompetenceFacade extends AbstractFacade<LienFormationC
     public LienFormationCompetenceFacade() {
         super(LienFormationCompetence.class);
     }
-    
+
+    @Override
+    public List<Integer> findByIdFormation(int idFormation) {
+        List<LienFormationCompetence> liste = (em.createNamedQuery("LienFormationCompetence.findByIdFormation")).setParameter("idFormation", idFormation).getResultList();
+        List<Integer> listeIdCompetences = new ArrayList<Integer>();
+        for (LienFormationCompetence c : liste) {
+            listeIdCompetences.add(c.getLienFormationCompetencePK().getIdCompetence());
+        }
+        return listeIdCompetences;
+    }
+
 }

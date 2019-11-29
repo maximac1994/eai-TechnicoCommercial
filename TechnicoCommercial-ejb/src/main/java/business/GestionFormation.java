@@ -5,13 +5,19 @@
  */
 package business;
 
+import MessagesTypes.CompetenceNec;
 import MessagesTypes.DemandeFormationMessage;
+import MessagesTypes.DemandeRessources;
+import MessagesTypes.EvenementFormation;
+import MessagesTypes.EvenementFormationProjet1;
+import MessagesTypes.ListeFormateursCompatibles;
 import MessagesTypes.ReponseExistenceFormation;
 import entities.EquipementBis;
 import entities.Formation;
 import entities.LienFormationCompetence;
 import entities.LienFormationEquipement;
 import exceptions.UnknownFormationException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +29,8 @@ import repositories.LienFormationCompetenceFacadeLocal;
 import repositories.LienFormationEquipementFacadeLocal;
 import resources.FormationResource;
 import sender.FileConfirmerExistenceSender;
+import sender.FileFormationSender;
+import sender.TopicDemandeListeRessourcesSender;
 
 /**
  *
@@ -41,9 +49,15 @@ public class GestionFormation implements GestionFormationLocal {
     LienFormationCompetenceFacadeLocal lienFacadeCompetence;
 
     FileConfirmerExistenceSender senderConfirmerExistence;
+    
+    TopicDemandeListeRessourcesSender senderDemandeListeRessources;
+    
+    FileFormationSender senderFormation;
 
     public GestionFormation() {
         this.senderConfirmerExistence = new FileConfirmerExistenceSender();
+        this.senderDemandeListeRessources = new TopicDemandeListeRessourcesSender();
+        this.senderFormation = new FileFormationSender();
     }
 
     @Override
@@ -105,8 +119,46 @@ public class GestionFormation implements GestionFormationLocal {
     }
 
     @Override
-    public void listerFormateursDisponibles() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void listerFormateursDisponibles(EvenementFormationProjet1 evenementFormation) {
+        Logger.getLogger(GestionFormation.class.getName()).log(Level.INFO, "[APPLI TECHNICO] GestionFormation - listerFormateursDisponibles() : " + evenementFormation.toString());
+        DemandeRessources demandeRessources = this.construireMessageDemandeRessources(evenementFormation);
+        try {
+            this.senderDemandeListeRessources.publish(demandeRessources);
+        } catch (JMSException ex) {
+            Logger.getLogger(GestionFormation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GestionFormation.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    private DemandeRessources construireMessageDemandeRessources(EvenementFormationProjet1 evenementFormation) {
+        int idFormation = evenementFormation.getIdFormation();
+        DemandeRessources demandeRessources = new DemandeRessources();
+        demandeRessources.setIdInstance(evenementFormation.getIdInstance());
+        demandeRessources.setIdFormation(idFormation);
+        demandeRessources.setNbMax(evenementFormation.getNbMax());
+        Formation formation = this.ffl.find(evenementFormation.getIdFormation());
+        List<Integer> idCompetencesNecessaires = this.lienFacadeCompetence.findByIdFormation(idFormation);
+        List<CompetenceNec> competencesNecessaires = new ArrayList<CompetenceNec>();
+        for (Integer i : idCompetencesNecessaires) {
+            CompetenceNec c = new CompetenceNec();
+            c.setIdCompetence(i);
+            c.setNiveau(formation.getNiveauFormation());
+            competencesNecessaires.add(c);
+        }
+        demandeRessources.setCompetencesNecessaires(competencesNecessaires);
+        return demandeRessources;
+    }
+
+    @Override
+    public void envoyerFormateursDisponibles(ListeFormateursCompatibles formateursCompatibles) {
+        try {
+            this.senderFormation.publish(formateursCompatibles);
+        } catch (JMSException ex) {
+            Logger.getLogger(GestionFormation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GestionFormation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

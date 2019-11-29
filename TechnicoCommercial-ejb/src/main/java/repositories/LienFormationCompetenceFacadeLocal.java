@@ -30,4 +30,6 @@ public interface LienFormationCompetenceFacadeLocal {
 
     int count();
     
+    public List<Integer> findByIdFormation(int idFormation);
+    
 }

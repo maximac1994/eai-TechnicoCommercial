@@ -6,6 +6,9 @@
 package business;
 
 import MessagesTypes.DemandeFormationMessage;
+import MessagesTypes.EvenementFormation;
+import MessagesTypes.EvenementFormationProjet1;
+import MessagesTypes.ListeFormateursCompatibles;
 import entities.Formation;
 import exceptions.UnknownFormationException;
 import java.util.List;
@@ -28,6 +31,8 @@ public interface GestionFormationLocal {
     
     public void verifierExistanceFormation(DemandeFormationMessage demandeFormation) throws JMSException, InterruptedException;
     
-    public void listerFormateursDisponibles();
+    public void listerFormateursDisponibles(EvenementFormationProjet1 evenementFormation);
+    
+    public void envoyerFormateursDisponibles(ListeFormateursCompatibles formateursCompatibles);
     
 }
