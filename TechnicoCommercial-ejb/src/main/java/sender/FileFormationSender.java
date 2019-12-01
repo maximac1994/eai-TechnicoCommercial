@@ -6,6 +6,7 @@
 package sender;
 
 import MessagesTypes.ListeFormateursCompatibles;
+import MessagesTypes.ListeSallesCompatibles;
 import MessagesTypes.ReponseExistenceFormation;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,13 +62,25 @@ public class FileFormationSender {
         connection.start();
     }
 
-    public void publish(ListeFormateursCompatibles formateursCompatibles) throws JMSException, InterruptedException {
-        Logger.getLogger(FileFormationSender.class.getName()).log(Level.INFO, "[APPLI TECHNICO] FileFormationSender - publish() : " + formateursCompatibles.toString());
+    public void publishFormateurs(ListeFormateursCompatibles formateursCompatibles) throws JMSException, InterruptedException {
+        Logger.getLogger(FileFormationSender.class.getName()).log(Level.INFO, "[APPLI TECHNICO] FileFormationSender - publishFormateurs() : " + formateursCompatibles.toString());
         if (context == null) {
             this.createContext();
         }
         this.connect();
         ObjectMessage message = session.createObjectMessage(formateursCompatibles);
+        //message.setJMSType();
+        sender.send(message);
+        this.close();
+    }
+    
+    public void publishSalles(ListeSallesCompatibles sallesCompatibles) throws JMSException, InterruptedException {
+        Logger.getLogger(FileFormationSender.class.getName()).log(Level.INFO, "[APPLI TECHNICO] FileFormationSender - publishSalles() : " + sallesCompatibles.toString());
+        if (context == null) {
+            this.createContext();
+        }
+        this.connect();
+        ObjectMessage message = session.createObjectMessage(sallesCompatibles);
         //message.setJMSType();
         sender.send(message);
         this.close();

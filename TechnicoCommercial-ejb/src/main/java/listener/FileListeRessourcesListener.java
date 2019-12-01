@@ -6,6 +6,7 @@
 package listener;
 
 import MessagesTypes.ListeFormateursCompatibles;
+import MessagesTypes.ListeSallesCompatibles;
 import business.GestionFormationLocal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,8 +43,10 @@ public class FileListeRessourcesListener implements MessageListener {
                 Object pqObj = ((ObjectMessage) message).getObject();
                 if (pqObj instanceof ListeFormateursCompatibles) {
                     ListeFormateursCompatibles formateursCompatibles = (ListeFormateursCompatibles) pqObj;
-                    
-                    System.out.println("-------- Received: " + formateursCompatibles.toString());
+                    this.gfl.envoyerFormateursDisponibles(formateursCompatibles);
+                } else if (pqObj instanceof ListeSallesCompatibles) {
+                    ListeSallesCompatibles sallesCompatibles = (ListeSallesCompatibles) pqObj;
+                    this.gfl.envoyerSallesDisponibles(sallesCompatibles);
                 }
             } catch (JMSException ex) {
                 Logger.getLogger(FileVerifierExistenceListener.class.getName()).log(Level.SEVERE, null, ex);

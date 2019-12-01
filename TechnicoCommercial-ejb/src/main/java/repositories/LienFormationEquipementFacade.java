@@ -6,6 +6,8 @@
 package repositories;
 
 import entities.LienFormationEquipement;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +29,16 @@ public class LienFormationEquipementFacade extends AbstractFacade<LienFormationE
 
     public LienFormationEquipementFacade() {
         super(LienFormationEquipement.class);
+    }
+    
+    @Override
+    public List<Integer> findByIdFormation(int idFormation) {
+        List<LienFormationEquipement> liste = (em.createNamedQuery("LienFormationEquipement.findByIdFormation")).setParameter("idFormation", idFormation).getResultList();
+        List<Integer> listeIdEquipement = new ArrayList<Integer>();
+        for (LienFormationEquipement c : liste) {
+            listeIdEquipement.add(c.getLienFormationEquipementPK().getIdEquipement());
+        }
+        return listeIdEquipement;
     }
     
 }

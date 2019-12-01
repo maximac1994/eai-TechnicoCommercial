@@ -50,7 +50,7 @@ public class TopicFormationListener implements MessageListener {
                 if (pqObj instanceof EvenementFormation) {
                     if ("projet1".equals(message.getJMSType())) {
                         EvenementFormationProjet1 evenementFormation = (EvenementFormationProjet1) pqObj;
-                        this.gfl.listerFormateursDisponibles(evenementFormation);
+                        this.gfl.listerFormateursSallesDisponibles(evenementFormation);
                     }
                 }
             } else if (message != null) {

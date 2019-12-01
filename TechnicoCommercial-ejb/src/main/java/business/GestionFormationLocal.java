@@ -9,6 +9,7 @@ import MessagesTypes.DemandeFormationMessage;
 import MessagesTypes.EvenementFormation;
 import MessagesTypes.EvenementFormationProjet1;
 import MessagesTypes.ListeFormateursCompatibles;
+import MessagesTypes.ListeSallesCompatibles;
 import entities.Formation;
 import exceptions.UnknownFormationException;
 import java.util.List;
@@ -22,17 +23,19 @@ import resources.FormationResource;
  */
 @Local
 public interface GestionFormationLocal {
-    
+
     public List<Formation> listerFormations();
-    
+
     public void creerFormation(FormationResource formation);
-    
+
     public void supprimerFormation(int idFormation) throws UnknownFormationException;
-    
+
     public void verifierExistanceFormation(DemandeFormationMessage demandeFormation) throws JMSException, InterruptedException;
-    
-    public void listerFormateursDisponibles(EvenementFormationProjet1 evenementFormation);
-    
+
+    public void listerFormateursSallesDisponibles(EvenementFormationProjet1 evenementFormation);
+
     public void envoyerFormateursDisponibles(ListeFormateursCompatibles formateursCompatibles);
-    
+
+    public void envoyerSallesDisponibles(ListeSallesCompatibles sallesCompatibles);
+
 }

@@ -11,6 +11,7 @@ import MessagesTypes.DemandeRessources;
 import MessagesTypes.EvenementFormation;
 import MessagesTypes.EvenementFormationProjet1;
 import MessagesTypes.ListeFormateursCompatibles;
+import MessagesTypes.ListeSallesCompatibles;
 import MessagesTypes.ReponseExistenceFormation;
 import entities.EquipementBis;
 import entities.Formation;
@@ -49,9 +50,9 @@ public class GestionFormation implements GestionFormationLocal {
     LienFormationCompetenceFacadeLocal lienFacadeCompetence;
 
     FileConfirmerExistenceSender senderConfirmerExistence;
-    
+
     TopicDemandeListeRessourcesSender senderDemandeListeRessources;
-    
+
     FileFormationSender senderFormation;
 
     public GestionFormation() {
@@ -119,8 +120,8 @@ public class GestionFormation implements GestionFormationLocal {
     }
 
     @Override
-    public void listerFormateursDisponibles(EvenementFormationProjet1 evenementFormation) {
-        Logger.getLogger(GestionFormation.class.getName()).log(Level.INFO, "[APPLI TECHNICO] GestionFormation - listerFormateursDisponibles() : " + evenementFormation.toString());
+    public void listerFormateursSallesDisponibles(EvenementFormationProjet1 evenementFormation) {
+        Logger.getLogger(GestionFormation.class.getName()).log(Level.INFO, "[APPLI TECHNICO] GestionFormation - listerFormateursSallesDisponibles() : " + evenementFormation.toString());
         DemandeRessources demandeRessources = this.construireMessageDemandeRessources(evenementFormation);
         try {
             this.senderDemandeListeRessources.publish(demandeRessources);
@@ -136,8 +137,8 @@ public class GestionFormation implements GestionFormationLocal {
         DemandeRessources demandeRessources = new DemandeRessources();
         demandeRessources.setIdInstance(evenementFormation.getIdInstance());
         demandeRessources.setIdFormation(idFormation);
-        demandeRessources.setNbMax(evenementFormation.getNbMax());
         Formation formation = this.ffl.find(evenementFormation.getIdFormation());
+        demandeRessources.setNbMax(formation.getNbMax());
         List<Integer> idCompetencesNecessaires = this.lienFacadeCompetence.findByIdFormation(idFormation);
         List<CompetenceNec> competencesNecessaires = new ArrayList<CompetenceNec>();
         for (Integer i : idCompetencesNecessaires) {
@@ -147,18 +148,33 @@ public class GestionFormation implements GestionFormationLocal {
             competencesNecessaires.add(c);
         }
         demandeRessources.setCompetencesNecessaires(competencesNecessaires);
+        List<Integer> idEquipementsNecessaires = this.lienFacadeEquipement.findByIdFormation(idFormation);
+        demandeRessources.setEquipementsNecessaires(idEquipementsNecessaires);
         return demandeRessources;
     }
 
     @Override
     public void envoyerFormateursDisponibles(ListeFormateursCompatibles formateursCompatibles) {
+        Logger.getLogger(GestionFormation.class.getName()).log(Level.INFO, "[APPLI TECHNICO] GestionFormation - envoyerFormateursCompatibles() : " + formateursCompatibles.toString());
         try {
-            this.senderFormation.publish(formateursCompatibles);
+            this.senderFormation.publishFormateurs(formateursCompatibles);
         } catch (JMSException ex) {
             Logger.getLogger(GestionFormation.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InterruptedException ex) {
             Logger.getLogger(GestionFormation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    @Override
+    public void envoyerSallesDisponibles(ListeSallesCompatibles sallesCompatibles) {
+        Logger.getLogger(GestionFormation.class.getName()).log(Level.INFO, "[APPLI TECHNICO] GestionFormation - envoyerSallesCompatibles() : " + sallesCompatibles.toString());
+        try {
+            this.senderFormation.publishSalles(sallesCompatibles);
+        } catch (JMSException ex) {
+            Logger.getLogger(GestionFormation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GestionFormation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

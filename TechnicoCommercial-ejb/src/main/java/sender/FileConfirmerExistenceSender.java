@@ -44,9 +44,7 @@ public class FileConfirmerExistenceSender {
             dest = (Destination) context.lookup(destName);
         } catch (NamingException exception) {
             exception.printStackTrace();
-        } finally {
-
-        }
+        } 
     }
 
     public void connect() throws JMSException {

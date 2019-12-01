@@ -30,4 +30,6 @@ public interface LienFormationEquipementFacadeLocal {
 
     int count();
     
+    public List<Integer> findByIdFormation(int idFormation);
+    
 }
