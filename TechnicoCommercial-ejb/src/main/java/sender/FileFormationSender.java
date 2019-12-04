@@ -31,7 +31,7 @@ public class FileFormationSender {
     ConnectionFactory factory = null;
     Connection connection = null;
     String factoryName = "jms/__defaultConnectionFactory";
-    String destName = "FILE_CONFIRM_EXISTENCE";
+    String destName = "FILE_FORMATION";
     Destination dest = null;
     Session session = null;
     MessageProducer sender = null;
