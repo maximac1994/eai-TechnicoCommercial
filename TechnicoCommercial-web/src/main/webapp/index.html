@@ -1,10 +1,209 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Start Page</title>
+        <title>Technico Commercial</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <style>
+            body{
+                font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+                background-color: #EEEEEE;
+            }
+            .container-full{
+                width: 1100px;
+                margin-left : auto;
+                margin-right:auto;
+            }
+            .container{
+                background-color: #FFFFFF;
+                padding: 15px;
+                margin-bottom:10px;
+                box-shadow: 0px 0px 9px -2px rgba(0,0,0,0.75);
+            }
+            .libel{
+                font-weight: bold;
+                display: inline;
+                font-size: 22px;
+                text-transform: uppercase;
+            }
+            .info{
+                display: inline;
+            }
+            .item{
+                width: 120px;
+            }
+            .line{
+                display: flex;
+                padding-bottom: 5px;
+                padding-top: 5px;
+                border-bottom: 2px solid #5974FF;
+            }
+            .line-title{
+                display: flex;
+                margin-bottom : 15px;
+                background-color: #CEE8FE;
+            }
+            h2{
+                text-align: center;
+                margin-top : 5px!important;
+                text-transform: uppercase;
+
+            }
+            button{
+                background-color: #5974FF;
+                color : white;
+                border : none;
+                height : 25px;
+                border-radius: 9px 9px 9px 9px;
+                cursor: pointer;
+            }
+            .valider{
+                margin-top : 10px;
+            }
+            .successMsg{
+                background-color: #5974FF;
+                padding: 15px;
+                margin-bottom:10px;
+                box-shadow: 0px 0px 9px -2px rgba(0,0,0,0.75);
+            }
+            #btnSubmit {
+
+            }
+        </style>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <div class = "container-full">
+            <div class = "container">
+                <h2>Formations</h2>
+                <table class='table'>
+                    <thead>
+                        <tr>
+                            <th scope='col'>Code</th>
+                            <th scope='col'>Libelle</th>
+                            <th scope='col'>Thematique</th>
+                            <th scope='col'>Durée</th>
+                            <th scope='col'>Nb min</th>
+                            <th scope='col'>Nb max</th>
+                            <th scope='col'>Niveau</th>
+                            <th scope='col'></th>
+                        </tr>
+                    </thead>
+                    <tbody id="formations">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class = "container">
+                <h2>Création d'une formation</h2>
+                <form onsubmit="test()">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputCode">Code</label>
+                            <input type="text" class="form-control" id="inputCode" placeholder="Code formation">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputLibelle">Libellé</label>
+                            <input type="text" class="form-control" id="inputLibelle" placeholder="Libellé de la formation">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputThematique">Thématique</label>
+                        <input type="text" class="form-control" id="inputThematique" placeholder="Thématique de la formation">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="inputDuree">Durée</label>
+                            <input type="number" class="form-control" id="inputDuree" placeholder="Durée de la formation">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputNbMin">Niveau</label>
+                            <input type="number" class="form-control" id="inputNbMin" placeholder="Niveau de la formation">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputNbMin">Nombre minimum</label>
+                            <input type="number" class="form-control" id="inputNbMin" placeholder="Nombre minimum">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputNbMin">Nombre maximum</label>
+                            <input type="number" class="form-control" id="inputNbMin" placeholder="Nombre maximum">
+                        </div>
+                    </div>
+                    <div class="form-row">
+
+                    </div>
+                    <div class="text-right">
+                        <button id="btnSubmit" type="submit">Valider</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </body>
+    <script>
+        jQuery.when(jQuery.getJSON("http://localhost:8080/TechnicoCommercial-web/webresources/formations")).done(function (json) {
+            var html = "";
+            json.forEach(function (item, index, array) {
+                html += "<tr id='ligne" + item.idFormation + "'>";
+                html += "<th scope='row'>" + item.codeFormation + "</th>";
+                html += "<td scope='row'>" + item.libelleFormation + "</td>";
+                html += "<td scope='row'>" + item.thematiqueFormation + "</td>";
+                html += "<td scope='row'>" + item.dureeFormation + "</td>";
+                html += "<td scope='row'>" + item.nbMin + "</td>";
+                html += "<td scope='row'>" + item.nbMax + "</td>";
+                html += "<td scope='row'>" + item.niveauFormation + "</td>";
+                html += "<td scope='row'><button type='button' onClick='supprForm(" + item.idFormation + ")'>Supprimer</button></td>";
+                html += "</tr>"
+            });
+            $("#formations").append(html);
+        });
+
+        function test() {
+            var code = $('#inputCode').val();
+            var libelle = $('#inputLibelle').val();
+            var thematique = $('#inputThematique').val();
+            var duree = $('#inputDuree').val();
+            console.log("lala : " + code + " - " + libelle + " - " + thematique + " - " + duree);
+
+            /*
+             for (var i = 0; i < inputElements.length; i++) {
+             if (inputElements[i].checked) {
+             var comp = {id: 1, niveau: 1};
+             checkedValue = inputElements[i].value;
+             comp.id = checkedValue;
+             comp.niveau = $('.niv-' + inputElements[i].value).val();
+             competences.push(comp);
+             }
+             }
+             var res = {nom: "", prenom: "", competences: []};
+             res.nom = nomFormateur;
+             res.prenom = prenomFormateur;
+             res.competences = competences;
+             
+             postJson("http://localhost:8080/Rh-web/webresources/formateur", res,
+             function (data) {
+             window.localStorage.setItem("msg", data.responseText);
+             window.localStorage.setItem("status", data.status);
+             location.reload();
+             });
+             */
+
+        }
+
+        function supprForm(i) {
+            console.log("Supprimer formation");
+            deleteForm("http://localhost:8080/TechnicoCommercial-web/webresources/formations?idFormation=" + i);
+            location.reload();
+        }
+
+        function deleteForm(url) {
+            return jQuery.ajax({
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                type: 'DELETE',
+                url: url
+            });
+        }
+        ;
+    </script>
 </html>
