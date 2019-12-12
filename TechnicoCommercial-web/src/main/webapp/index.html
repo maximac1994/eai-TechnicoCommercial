@@ -4,7 +4,7 @@
         <title>Technico Commercial</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
         <style>
             body{
                 font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -71,75 +71,7 @@
 
             }
         </style>
-    </head>
-    <body>
-        <div class = "container-full">
-            <div class = "container">
-                <h2>Formations</h2>
-                <table class='table'>
-                    <thead>
-                        <tr>
-                            <th scope='col'>Code</th>
-                            <th scope='col'>Libelle</th>
-                            <th scope='col'>Thematique</th>
-                            <th scope='col'>Durée</th>
-                            <th scope='col'>Nb min</th>
-                            <th scope='col'>Nb max</th>
-                            <th scope='col'>Niveau</th>
-                            <th scope='col'></th>
-                        </tr>
-                    </thead>
-                    <tbody id="formations">
-
-                    </tbody>
-                </table>
-            </div>
-            <div class = "container">
-                <h2>Création d'une formation</h2>
-                <form onsubmit="test()">
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="inputCode">Code</label>
-                            <input type="text" class="form-control" id="inputCode" placeholder="Code formation">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="inputLibelle">Libellé</label>
-                            <input type="text" class="form-control" id="inputLibelle" placeholder="Libellé de la formation">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputThematique">Thématique</label>
-                        <input type="text" class="form-control" id="inputThematique" placeholder="Thématique de la formation">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-3">
-                            <label for="inputDuree">Durée</label>
-                            <input type="number" class="form-control" id="inputDuree" placeholder="Durée de la formation">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="inputNbMin">Niveau</label>
-                            <input type="number" class="form-control" id="inputNbMin" placeholder="Niveau de la formation">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="inputNbMin">Nombre minimum</label>
-                            <input type="number" class="form-control" id="inputNbMin" placeholder="Nombre minimum">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="inputNbMin">Nombre maximum</label>
-                            <input type="number" class="form-control" id="inputNbMin" placeholder="Nombre maximum">
-                        </div>
-                    </div>
-                    <div class="form-row">
-
-                    </div>
-                    <div class="text-right">
-                        <button id="btnSubmit" type="submit">Valider</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </body>
-    <script>
+        <script>
         jQuery.when(jQuery.getJSON("http://localhost:8080/TechnicoCommercial-web/webresources/formations")).done(function (json) {
             var html = "";
             json.forEach(function (item, index, array) {
@@ -157,12 +89,42 @@
             $("#formations").append(html);
         });
 
-        function test() {
+ jQuery.when(
+                    jQuery.getJSON("http://localhost:8080/TechnicoCommercial-web/webresources/competences")
+                    ).done(function (json) {
+                var html = "";
+                json.forEach(function (item, index, array) {
+                    html += "<tr>";
+                    html += "<td scope='row'>" + item.nomCompetence + "</td>";
+                     html += "<td scope='row'><input class='comp' type='checkbox' value='" + item.idCompetence + "'></td>";
+                   html += "</tr>"
+                });
+                html += "</div>";
+                $("#competences").prepend(html);
+            });
+            
+            jQuery.when(
+                    jQuery.getJSON("http://localhost:8080/TechnicoCommercial-web/webresources/equipements")
+                    ).done(function (json) {
+                var html = "";
+                json.forEach(function (item, index, array) {
+                    html += "<tr>";
+                    html += "<td scope='row'>" + item.nomEquipement + "</td>";
+                     html += "<td scope='row'><input class='equip' type='checkbox' value='" + item.idEquipement + "'></td>";
+                   html += "</tr>"
+                });
+                html += "</div>";
+                $("#equipements").prepend(html);
+            });
+            
+            
+            function test() {
+            console.log('test');
             var code = $('#inputCode').val();
             var libelle = $('#inputLibelle').val();
             var thematique = $('#inputThematique').val();
             var duree = $('#inputDuree').val();
-            console.log("lala : " + code + " - " + libelle + " - " + thematique + " - " + duree);
+            
 
             /*
              for (var i = 0; i < inputElements.length; i++) {
@@ -205,5 +167,173 @@
             });
         }
         ;
+        $( document ).ready(function() {
+                if(window.localStorage.getItem("msg")){
+                    $(".successMsgCont").html("<div class='successMsg'>"+window.localStorage.getItem("msg")+"</div>");
+              if(window.localStorage.getItem("status") == 200){
+                  $('.successMsg').css('background-color', '#A5EBA3');
+              }else{
+                  $('.successMsg').css('background-color', '#FFA68C');
+              }
+            
+            window.localStorage.removeItem("msg");
+               window.localStorage.removeItem("status");
+                }
+                }
+               
+            );
+        function send(){
+            var codeFormation = $('#inputCode').val();
+            var libelleFormation = $('#inputLibelle').val();
+            var thematiqueFormation = $('#inputThematique').val();
+            var dureeFormation = $('#inputDuree').val();
+            var niveauFormation = $('#inputNiveau').val();
+            var nbMinFormation = $('#inputNbMin').val();
+            var nbMaxFormation = $('#inputNbMax').val();
+            var competencesNecessaires = new Array();
+            var equipementsNecessaires = new Array();
+            
+            var inputElementsComp = document.getElementsByClassName('comp');
+
+                for (var i = 0; i < inputElementsComp.length; i++) {
+                    if (inputElementsComp[i].checked) {
+                        checkedValue = inputElementsComp[i].value;
+                        competencesNecessaires.push(checkedValue);
+                    }
+
+                }
+            var inputElementsEquip = document.getElementsByClassName('equip');
+
+                for (var i = 0; i < inputElementsEquip.length; i++) {
+                    if (inputElementsEquip[i].checked) {
+                        checkedValue = inputElementsEquip[i].value;
+                        equipementsNecessaires.push(checkedValue);
+                    }
+
+                }
+                
+                var res = {codeFormation:"",libelleFormation :"", dureeFormation :0, equipementsNecessaires :[], competencesNecessaires :[],nbMin:0,nbMax:0,thematiqueFormation:"", niveauFormation:0};
+                res.codeFormation = codeFormation;      
+                res.libelleFormation = libelleFormation;
+                res.dureeFormation = dureeFormation;
+                res.equipementsNecessaires = equipementsNecessaires;
+                res.competencesNecessaires = competencesNecessaires;
+                res.nbMin = nbMinFormation;
+                res.nbMax = nbMaxFormation;
+                res.thematiqueFormation = thematiqueFormation;
+                res.niveauFormation = niveauFormation;
+                
+                postJson("http://localhost:8080/TechnicoCommercial-web/webresources/formations", res, 
+                function( data ) {
+                window.localStorage.setItem("msg",data.responseText);
+                window.localStorage.setItem("status",data.status);
+                console.log(data);
+               // location.reload();
+});
+function postJson(url, data, callback) {
+                return jQuery.ajax({
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    type: 'POST',
+                    url: url,
+                    data: JSON.stringify(data),
+                    complete : callback,
+                    dataType: 'json'
+                });
+            }
+            ;
+        }
     </script>
+    </head>
+    <body>
+        <div class = "container-full">
+            <div class = "container">
+                <h2>Formations</h2>
+                <table class='table'>
+                    <thead>
+                        <tr>
+                            <th scope='col'>Code</th>
+                            <th scope='col'>Libelle</th>
+                            <th scope='col'>Thematique</th>
+                            <th scope='col'>Durée</th>
+                            <th scope='col'>Nb min</th>
+                            <th scope='col'>Nb max</th>
+                            <th scope='col'>Niveau</th>
+                            <th scope='col'></th>
+                        </tr>
+                    </thead>
+                    <tbody id="formations">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class = "container">
+                <h2>Création d'une formation</h2>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputCode">Code</label>
+                            <input type="text" class="form-control" id="inputCode" placeholder="Code formation">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputLibelle">Libellé</label>
+                            <input type="text" class="form-control" id="inputLibelle" placeholder="Libellé de la formation">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputThematique">Thématique</label>
+                        <input type="text" class="form-control" id="inputThematique" placeholder="Thématique de la formation">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="inputDuree">Durée</label>
+                            <input type="number" class="form-control" id="inputDuree" placeholder="Durée de la formation">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputNbMin">Niveau</label>
+                            <input type="number" class="form-control" id="inputNiveau" placeholder="Niveau de la formation">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputNbMin">Nombre minimum</label>
+                            <input type="number" class="form-control" id="inputNbMin" placeholder="Nombre minimum">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputNbMin">Nombre maximum</label>
+                            <input type="number" class="form-control" id="inputNbMax" placeholder="Nombre maximum">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <table class='table'>
+                    <thead>
+                        <tr>
+                            <th scope='col'>Compétences nécessaires</th>
+                            <th scope='col'></th>
+                        </tr>
+                    </thead>
+                    <tbody id="competences">
+
+                    </tbody>
+                </table>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <table class='table'>
+                    <thead>
+                        <tr>
+                            <th scope='col'>Equipements nécessaires</th>
+                            <th scope='col'></th>
+                        </tr>
+                    </thead>
+                    <tbody id="equipements">
+
+                    </tbody>
+                </table>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button onClick="send()">Valider</button>
+                    </div>
+            </div>
+        </div>
+    </body>
 </html>
