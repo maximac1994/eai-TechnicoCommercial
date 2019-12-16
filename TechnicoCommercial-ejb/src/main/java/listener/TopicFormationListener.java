@@ -19,7 +19,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 /**
- *
+ * topic formation
  * @author 33785
  */
 @MessageDriven(activationConfig = {
@@ -38,9 +38,16 @@ public class TopicFormationListener implements MessageListener {
     @EJB
     GestionFormationLocal gfl;
 
+    /**
+     *
+     */
     public TopicFormationListener() {
     }
 
+    /**
+     * pour chaque message, si c'est un etat 'projet1' liste les salles et les formateurs disponibles
+     * @param message
+     */
     @Override
     public void onMessage(Message message) {
         try {

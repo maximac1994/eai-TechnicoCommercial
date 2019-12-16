@@ -10,12 +10,16 @@ import java.util.List;
 import javax.ejb.Local;
 
 /**
- *
+ * gestion des competences disponibles
  * @author 33785
  */
 @Local
 public interface GestionCompetencesLocal {
     
+    /**
+     * lister les competences
+     * @return
+     */
     public List<CompetenceBis> listerCompetences();
     
 }

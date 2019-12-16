@@ -10,12 +10,16 @@ import java.util.List;
 import javax.ejb.Local;
 
 /**
- *
+ * exposition des traitements relativs aux competences en REST
  * @author 33785
  */
 @Local
 public interface CompetenceBisServiceLocal {
     
+    /**
+     * lister les competences
+     * @return
+     */
     public List<CompetenceBis> listerCompetences();
     
 }

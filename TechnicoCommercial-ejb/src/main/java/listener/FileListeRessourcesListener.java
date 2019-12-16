@@ -32,9 +32,16 @@ public class FileListeRessourcesListener implements MessageListener {
     @EJB
     GestionFormationLocal gfl;
     
+    /**
+     *
+     */
     public FileListeRessourcesListener() {
     }
     
+    /**
+     * pour chaque messae : envoie la liste des formateurs et des salles disponibles
+     * @param message
+     */
     @Override
     public void onMessage(Message message) {
         Logger.getLogger(FileListeRessourcesListener.class.getName()).log(Level.INFO, "[APPLI TECHNICO] FileListeRessourcesListener - onMessage()");

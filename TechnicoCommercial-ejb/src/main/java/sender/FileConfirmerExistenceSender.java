@@ -58,6 +58,12 @@ public class FileConfirmerExistenceSender {
         connection.start();
     }
 
+    /**
+     * envoie la reponse selon llexistance ou non de la formation
+     * @param reponseExistence
+     * @throws JMSException
+     * @throws InterruptedException
+     */
     public void publish(ReponseExistenceFormation reponseExistence) throws JMSException, InterruptedException {
         Logger.getLogger(FileConfirmerExistenceSender.class.getName()).log(Level.INFO, "[APPLI TECHNICO] FileConfirmerExistenceSender - publish() : " + reponseExistence.toString());
         if (context == null) {

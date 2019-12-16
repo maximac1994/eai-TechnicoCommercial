@@ -61,7 +61,12 @@ public class FileFormationSender {
         // start the connection, to enable message sends
         connection.start();
     }
-
+/**
+     * envoie lal iste des formateurs disponibles
+     * @param formateursCompatibles
+     * @throws JMSException
+     * @throws InterruptedException
+     */
     public void publishFormateurs(ListeFormateursCompatibles formateursCompatibles) throws JMSException, InterruptedException {
         Logger.getLogger(FileFormationSender.class.getName()).log(Level.INFO, "[APPLI TECHNICO] FileFormationSender - publishFormateurs() : " + formateursCompatibles.toString());
         if (context == null) {
@@ -74,6 +79,12 @@ public class FileFormationSender {
         this.close();
     }
     
+    /**
+     * envoie lal iste des salles disponibles
+     * @param sallesCompatibles
+     * @throws JMSException
+     * @throws InterruptedException
+     */
     public void publishSalles(ListeSallesCompatibles sallesCompatibles) throws JMSException, InterruptedException {
         Logger.getLogger(FileFormationSender.class.getName()).log(Level.INFO, "[APPLI TECHNICO] FileFormationSender - publishSalles() : " + sallesCompatibles.toString());
         if (context == null) {

@@ -19,7 +19,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 /**
- *
+ * file verif existance
  * @author 33785
  */
 @MessageDriven(activationConfig = {
@@ -32,9 +32,16 @@ public class FileVerifierExistenceListener implements MessageListener {
     @EJB
     GestionFormationLocal gfl;
 
+    /**
+     *
+     */
     public FileVerifierExistenceListener() {
     }
 
+    /**
+     * pour chaque message : verifie l'existance d'une formation
+     * @param message
+     */
     @Override
     public void onMessage(Message message) {
         Logger.getLogger(FileVerifierExistenceListener.class.getName()).log(Level.INFO, "[APPLI TECHNICO] FileVerifierExistenceListener - onMessage()");

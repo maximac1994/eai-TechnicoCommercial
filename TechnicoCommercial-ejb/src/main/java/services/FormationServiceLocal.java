@@ -12,16 +12,29 @@ import javax.ejb.Local;
 import resources.FormationResource;
 
 /**
- *
+ * Exposition des traitements relatifs aux foamtions en REST
  * @author 33785
  */
 @Local
 public interface FormationServiceLocal {
     
+    /**
+     * lister les formations
+     * @return
+     */
     public List<Formation> listerFormations();
     
+    /**
+     * creer une formation
+     * @param formation
+     */
     public void creerFormation(FormationResource formation);
     
+    /**
+     * supprimer une formation
+     * @param idFormation
+     * @throws UnknownFormationException
+     */
     public void supprimerFormation(int idFormation) throws UnknownFormationException;
     
 }

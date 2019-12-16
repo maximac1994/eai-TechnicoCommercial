@@ -10,12 +10,16 @@ import java.util.List;
 import javax.ejb.Local;
 
 /**
- *
+ * exposition des traitements relatifs aux equipements en REST
  * @author 33785
  */
 @Local
 public interface EquipementBisServiceLocal {
     
+    /**
+     * lister les equipements
+     * @return
+     */
     public List<EquipementBis> listerEquipements();
     
 }

@@ -10,12 +10,16 @@ import java.util.List;
 import javax.ejb.Local;
 
 /**
- *
+ * gestion des equipements disponibles
  * @author 33785
  */
 @Local
 public interface GestionEquipementsLocal {
     
+    /**
+     * lister les equipements
+     * @return
+     */
     public List<EquipementBis> listerEquipements();
     
 }

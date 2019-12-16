@@ -61,6 +61,12 @@ public class TopicDemandeListeRessourcesSender {
         connection.start();
     }
 
+    /**
+     * envoie une demande de liste de ressources aux services RH et Patrimoine
+     * @param demandeRessources
+     * @throws JMSException
+     * @throws InterruptedException
+     */
     public void publish(DemandeRessources demandeRessources) throws JMSException, InterruptedException {
         Logger.getLogger(TopicDemandeListeRessourcesSender.class.getName()).log(Level.INFO, "[APPLI TECHNICO] TopicDemandeListeRessources - publish() : " + demandeRessources.toString());
         if (context == null) {
